@@ -1,0 +1,58 @@
+n = int(input("Enter number of nodes: "))
+
+graph = {}
+
+for i in range(n):
+    node = input(f"Enter node {i+1}: ")
+    neighbours = input(
+        f"Enter neighbours of {node} (space separated): "
+    ).split()
+    graph[node] = neighbours
+
+start = input("Enter start node: ")
+end = input("Enter end node: ")
+
+visited = set()
+path = []
+
+
+def dfs(node):
+    visited.add(node)
+    path.append(node)
+
+    if node == end:
+        return True
+
+    for neighbour in graph.get(node, []):
+        if neighbour not in visited:
+            if dfs(neighbour):
+                return True
+
+    path.pop()
+    return False
+
+
+if dfs(start):
+    print("DFS Path:", " -> ".join(path))
+else:
+    print("No path found")
+
+
+OUTPUT:
+Enter number of nodes: 6
+Enter node 1: a
+Enter neighbours of a (space separated): b c
+Enter node 2: b
+Enter neighbours of b (space separated): 
+Enter node 3: c
+Enter neighbours of c (space separated): d
+Enter node 4: d
+Enter neighbours of d (space separated): e f
+Enter node 5: e
+Enter neighbours of e (space separated): 
+Enter node 6: f
+Enter neighbours of f (space separated): 
+Enter start node: a
+Enter end node: f
+DFS Path: a -> c -> d -> f
+
