@@ -1,0 +1,71 @@
+def calculate_cost(route, cost):
+    total = 0
+
+    for i in range(len(route) - 1):
+        total += cost[route[i]][route[i + 1]]
+
+    return total
+
+
+def hill_climbing(start):
+    # Cost matrix between 4 cities
+    cost = [
+        [0, 35, 10, 25],
+        [35, 0, 35, 15],
+        [10, 35, 0, 20],
+        [25, 15, 20, 0]
+    ]
+
+    # Initial route
+    route = [start]
+
+    # Add remaining cities
+    for city in range(4):
+        if city != start:
+            route.append(city)
+
+    route.append(start)
+
+    current_cost = calculate_cost(route, cost)
+
+    while True:
+        best_route = route[:]
+        best_cost = current_cost
+
+        # Try swapping two cities
+        for i in range(1, len(route) - 2):
+            for j in range(i + 1, len(route) - 1):
+
+                new_route = route[:]
+                new_route[i], new_route[j] = new_route[j], new_route[i]
+
+                new_cost = calculate_cost(new_route, cost)
+
+                if new_cost < best_cost:
+                    best_route = new_route
+                    best_cost = new_cost
+
+        # If no better solution is found, stop
+        if best_cost >= current_cost:
+            break
+
+        route = best_route
+        current_cost = best_cost
+
+    print("Best Route:")
+    print(" -> ".join(map(str, route)))
+    print("Total Cost:", current_cost)
+
+
+start = int(input("Enter starting city (0-3): "))
+
+if 0 <= start <= 3:
+    hill_climbing(start)
+else:
+    print("Invalid city")
+
+OUTPUT:
+Enter starting city (0-3): 0
+Best Route:
+0 -> 1 -> 3 -> 2 -> 0
+Total Cost: 80
